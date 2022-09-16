@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Tutorial</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Features</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link disabled">Disabled</a>
+                </li>
+            </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h1>TODO List</h1>
+    </div>
+    <div class="container">
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" placeholder="Title for List">
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" rows="3"></textarea>
+        </div>
+        <button type="button" class="btn btn-primary" id="add">Add Item</button>
+        <button type="button" class="btn btn-primary" id="clear" onclick="cleared()">Clear List</button>
+    </div>
+    <div class="container" id="listItems">
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">S.No.</th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td><button type="button" id="delete" class="btn btn-primary">Delete</button></td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+    <script>
+
+        function getAnUpdate(){
+            console.log("Updating...");
+            title= document.getElementById('title').value;
+            desc = document.getElementById('description').value;
+            if (title != '' && desc != ''){
+                if (localStorage.getItem('textJson')==null)
+                {
+                    itemArray = [];
+                    itemArray.push([title, desc]);
+                    localStorage.setItem('textJson', JSON.stringify(itemArray))
+                }
+                else
+                {
+                    itemArray = localStorage.getItem('textJson')
+                    itemArray = JSON.parse(itemArray);
+                    itemArray.push([title, desc]);
+                    localStorage.setItem('textJson', JSON.stringify(itemArray));
+                }
+                update();
+            }
+            else
+            {
+                alert("Enter all fields!!");
+            }
+            
+        }
+
+        function update(){
+            if (localStorage.getItem('textJson')==null)
+            {
+                itemArray = [];
+                localStorage.setItem('textJson', JSON.stringify(itemArray))
+            }
+            else
+            {
+                itemArray = localStorage.getItem('textJson')
+                itemArray = JSON.parse(itemArray);
+            }
+
+            //Populate the Table
+
+            let tableBody = document.getElementById('tableBody');
+            let str = "";
+            itemArray.forEach((element, index) => {
+                str += `
+                <tr>
+                    <th scope="row">${index+1}</th>
+                    <td>${element[0]}</td>
+                    <td>${element[1]}</td>
+                    <td><button type="button" id="delete" class="btn btn-secondary" onclick="deleted(${index})">Delete</button></td>
+                </tr>`;
+            });
+            tableBody.innerHTML = str;
+        }
+        
+        add = document.getElementById('add');
+        add.addEventListener("click", getAnUpdate);
+        update();
+
+        function deleted(itemIndex){
+            console.log("Delete" + itemIndex);
+            itemArray = localStorage.getItem('textJson');
+            itemArray = JSON.parse(itemArray);
+            itemArray.splice(itemIndex, 1);
+            localStorage.setItem('textJson', JSON.stringify(itemArray));
+            update();
+        }
+
+        function cleared(){
+            console.log("Clearing Storage");
+            localStorage.clear();
+            update();
+        }
+    </script>
+</body>
+</html>

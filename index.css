@@ -1,0 +1,13 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.container{
+    margin: 0 auto;
+    padding: 0px;
+    width: 60%; 
+}
+
+.container h1{
+    text-align: center;
+}
