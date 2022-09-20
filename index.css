@@ -11,3 +11,7 @@
 .container h1{
     text-align: center;
 }
+.delete{
+    height: 1em;
+    width: 1em;
+}
